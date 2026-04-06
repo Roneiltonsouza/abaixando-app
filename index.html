@@ -7,57 +7,44 @@
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; display: flex; align-items: center; justify-content: center; min-height: 100vh; color: white; }
         .container { background: #161616; padding: 30px; border-radius: 25px; text-align: center; width: 95%; max-width: 420px; border: 2px solid #FF4500; box-shadow: 0 10px 40px rgba(255, 69, 0, 0.3); }
-        
         h2 { color: #FF4500; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-size: 26px; }
         .sub { font-size: 13px; color: #888; margin-bottom: 25px; }
-        
         .input-group { text-align: left; margin-bottom: 15px; }
         label { font-size: 11px; color: #FF4500; font-weight: bold; margin-left: 5px; }
-        
         input { width: 100%; padding: 16px; margin: 8px 0; border-radius: 12px; border: 1px solid #333; background: #000; color: #00ff00; box-sizing: border-box; font-size: 14px; outline: none; text-align: center; }
         input:focus { border-color: #FF4500; }
-        
         .btn { background: #FF4500; padding: 18px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; border: none; color: white; transition: 0.3s; font-size: 16px; text-transform: uppercase; margin-top: 10px; }
-        .btn:active { transform: scale(0.96); }
-        
-        #resultado { background: #222; padding: 20px; border-radius: 15px; margin-top: 25px; border: 1px dashed #FF4500; display: none; animation: surge 0.5s ease; }
-        
-        .config-down { margin-top: 20px; padding-top: 15px; border-top: 1px solid #333; }
+        #resultado { background: #222; padding: 20px; border-radius: 15px; margin-top: 25px; border: 1px dashed #FF4500; display: none; }
         .btn-down { background: #008000; margin-top: 10px; }
-        
-        @keyframes surge { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>ABAIXANDO APP</h2>
-        <p class="sub">Gerador de Download Direto do Google Drive</p>
+        <p class="sub">Gerador de Download Direto</p>
         
         <div class="input-group">
-            <label>COLE O LINK DO DRIVE ABAIXO:</label>
-            <input type="text" id="driveLink" placeholder="https://drive.google.com/file/d/...">
+            <label>COLE O LINK DO DRIVE:</label>
+            <input type="text" id="driveLink" placeholder="Cole o link aqui...">
         </div>
         
         <button class="btn" onclick="gerarDownload()">GERAR LINK DE DOWNLOAD</button>
 
         <div id="resultado">
-            <p style="font-size: 14px; margin-bottom: 10px; color: #FF4500; font-weight: bold;">✅ DOWNLOAD CONFIGURADO!</p>
+            <p style="font-size: 14px; color: #FF4500; font-weight: bold;">✅ PRONTO PARA BAIXAR!</p>
             <input type="text" id="linkFinal" readonly>
-            
-            <div class="config-down">
-                <button class="btn btn-down" onclick="baixarAgora()">BAIXAR APLICATIVO AGORA</button>
-                <p style="font-size: 11px; color: #666; margin-top: 10px;">Configuração: Forçar Download Direto Ativa</p>
-            </div>
+            <button class="btn btn-down" onclick="baixarAgora()">BAIXAR AGORA</button>
         </div>
     </div>
 
     <script>
-        // Link do seu Worker que faz a ponte
+        // Link do seu Worker atualizado
         const workerUrl = "https://abaixandoapp.roneiltonsouza2019.workers.dev/";
 
         function gerarDownload() {
             const link = document.getElementById('driveLink').value;
-            const regex = /\/d\/([a-zA-Z0-9_-]+)/;
+            // Pega o ID do arquivo de qualquer formato de link do Drive
+            const regex = /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/;
             const match = link.match(regex);
 
             if (match && match[1]) {
@@ -66,15 +53,20 @@
                 document.getElementById('linkFinal').value = final;
                 document.getElementById('resultado').style.display = "block";
             } else {
-                alert("Link inválido! Use o link de compartilhamento do Drive.");
+                alert("Link inválido!");
             }
         }
 
         function baixarAgora() {
             const url = document.getElementById("linkFinal").value;
             if (url) {
-                // Abre o link que o worker processou
-                window.location.href = url;
+                // Força o download sem abrir nova aba
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'aplicativo.apk';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             }
         }
     </script>
