@@ -52,8 +52,8 @@
     </div>
 
     <script>
-        // Link do seu Worker que faz a ponte
-        const workerUrl = "https://lively-meadow-8ea3.roneiltonsouza2019.workers.dev/";
+        // NOVO LINK DO WORKER ATUALIZADO
+        const workerUrl = "https://abaixandoapp.roneiltonsouza2019.workers.dev/";
 
         function gerarDownload() {
             const link = document.getElementById('driveLink').value;
@@ -62,7 +62,7 @@
 
             if (match && match[1]) {
                 const id = match[1];
-                // Monta o link que vai pro seu Worker baixar
+                // Monta o link que vai pro seu Worker baixar usando o novo endereço
                 const final = workerUrl + "?id=" + id;
                 document.getElementById('linkFinal').value = final;
                 document.getElementById('resultado').style.display = "block";
@@ -74,7 +74,7 @@
         function baixarAgora() {
             const url = document.getElementById("linkFinal").value;
             if (url) {
-                // Abre o link do worker que já entrega o arquivo pronto
+                // Redireciona para o worker que processa o download
                 window.location.href = url;
             }
         }
