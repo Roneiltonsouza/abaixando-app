@@ -20,27 +20,28 @@
 <body>
     <div class="container">
         <h2>ABAIXANDO APP</h2>
-        <p class="sub">Gerador de Download Direto</p>
+        <p class="sub">Download Direto Sem Avisos</p>
         <div class="input-group">
-            <label>COLE O LINK DO DRIVE ABAIXO:</label>
-            <input type="text" id="driveLink" placeholder="https://drive.google.com/file/d/...">
+            <label>COLE O LINK DO DRIVE:</label>
+            <input type="text" id="driveLink" placeholder="Cole o link do arquivo...">
         </div>
-        <button class="btn" onclick="gerarDownload()" style="width: 100%;">GERAR LINK DE DOWNLOAD</button>
+        <button class="btn" onclick="gerarDownload()" style="width: 100%;">GERAR DOWNLOAD AUTOMÁTICO</button>
 
         <div id="resultado">
-            <p style="font-size: 14px; color: #FF4500; font-weight: bold;">✅ DOWNLOAD CONFIGURADO!</p>
+            <p style="font-size: 14px; color: #FF4500; font-weight: bold;">✅ LINK CONFIGURADO!</p>
             <input type="text" id="linkFinal" readonly>
-            <button class="btn-down" onclick="baixarAgora()">BAIXAR APLICATIVO AGORA</button>
+            <button class="btn-down" onclick="baixarAgora()">BAIXAR AGORA</button>
         </div>
     </div>
 
     <script>
-        // ATENÇÃO: Usei o link do seu novo worker aqui
+        // Link do seu Worker oficial
         const workerUrl = "https://abaixandoapp.roneiltonsouza2019.workers.dev/";
 
         function gerarDownload() {
             const link = document.getElementById('driveLink').value;
-            const regex = /\/d\/([a-zA-Z0-9_-]+)/;
+            // Pega o ID do arquivo independente do formato do link
+            const regex = /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/;
             const match = link.match(regex);
 
             if (match && match[1]) {
@@ -49,13 +50,14 @@
                 document.getElementById('linkFinal').value = final;
                 document.getElementById('resultado').style.display = "block";
             } else {
-                alert("Link inválido!");
+                alert("Por favor, cole um link válido do Google Drive.");
             }
         }
 
         function baixarAgora() {
             const url = document.getElementById("linkFinal").value;
             if (url) {
+                // Dispara o download imediatamente
                 window.location.href = url;
             }
         }
